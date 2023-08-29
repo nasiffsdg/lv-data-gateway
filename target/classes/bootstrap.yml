@@ -1,0 +1,42 @@
+
+spring:
+  # 应用
+  application:
+    name: gateway-server
+  # SpringCloud
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      config:
+        group: dev
+
+    # 网关配置
+    gateway:
+      # 路由配置
+      routes:
+        - id: data-server-route
+          uri: lb://data-server
+          predicates:
+            - Path=/**
+      # 跨域配置
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:8080"
+            allowedMethods:
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*"
+            allowCredentials: true  # 是否允许携带 cookie
+            maxAge: 360000  # 跨域检测的有效期
+# 日志
+logging:
+  level:
+    root: info
+server:
+  port: 9010
